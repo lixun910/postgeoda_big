@@ -1,8 +1,12 @@
 FROM ubuntu:18.04
 
-ENV AWS_DEFAULT_REGION=$aws_default_region \
-    AWS_ACCESS_KEY=$aws_access_key \
-    AWS_SECRET_ACCESS_KEY=$aws_secret_access_key
+ARG aws_default_region=''
+ARG aws_access_key=''
+ARG aws_secret_access_key=''
+
+ENV AWS_REGION=${aws_default_region}
+ENV AWS_ACCESS_KEY=${aws_access_key}
+ENV AWS_SECRET_ACCESS_KEY=${aws_secret_access_key}
 
 ARG LISA_START=1
 ARG LISA_END=500
@@ -23,10 +27,13 @@ RUN apt-get install -y -q \
     unzip \
     git \
     wget \
+    awscli \
     postgresql-10 \
     postgresql-contrib-10 \
     postgresql-server-dev-10
     #gdal-bin postgresql-10-postgis-2.4 postgresql-10-postgis-scripts postgis
+
+# Setup S3cmd
 
 # Setting PostgreSQL
 RUN sed -i 's/\(peer\|md5\)/trust/' /etc/postgresql/10/main/pg_hba.conf && \
@@ -39,7 +46,6 @@ COPY . /tmp
 
 # build libgeoda
 RUN cd /tmp && chmod +x *.sh && \
-    rm -rf postgeoda && \
     git clone --recursive https://github.com/geodacenter/postgeoda && \
     cd postgeoda && \
     mkdir -p build && \
