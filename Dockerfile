@@ -46,7 +46,7 @@ COPY . /tmp
 
 # build libgeoda
 RUN cd /tmp && chmod +x *.sh && \
-    git clone --recursive https://github.com/geodacenter/postgeoda && \
+    git clone -b big --recursive https://github.com/geodacenter/postgeoda && \
     cd postgeoda && \
     mkdir -p build && \
     cd build && \
