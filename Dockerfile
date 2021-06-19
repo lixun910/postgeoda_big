@@ -27,13 +27,12 @@ RUN apt-get install -y -q \
     unzip \
     git \
     wget \
+    vim \
     awscli \
     postgresql-10 \
     postgresql-contrib-10 \
     postgresql-server-dev-10
     #gdal-bin postgresql-10-postgis-2.4 postgresql-10-postgis-scripts postgis
-
-# Setup S3cmd
 
 # Setting PostgreSQL
 RUN sed -i 's/\(peer\|md5\)/trust/' /etc/postgresql/10/main/pg_hba.conf && \
@@ -63,10 +62,7 @@ RUN cd /tmp && ./download_data.sh
 
 # create table
 RUN service postgresql start && /bin/su postgres -c \
-      /tmp/create_table.sh && service postgresql stop
+      /tmp/create_table.sh 
 
-# run LISA part i
-RUN service postgresql start && /bin/su postgres -c \
-      /tmp/run.sh && service postgresql stop
-
+CMD ["sh", "-c", "service postgresql start && /bin/su postgres -c /tmp/run.sh"]
  

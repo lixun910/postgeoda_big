@@ -10,6 +10,6 @@ echo "[default]" >> config
 echo "region=$AWS_REGION" >> config
 echo "output=json">> config
 
-aws s3 cp s3://postgeoda/nets_lisa.zip /tmp/nets_lisa.zip
+#aws s3 cp s3://postgeoda/nets_lisa.zip /tmp/nets_lisa.zip
 cd /tmp
 unzip nets_lisa.zip

@@ -1,13 +1,13 @@
 #!/bin/bash
 #
 cd ~
-mkdir .aws
+mkdir -p .aws
 cd .aws
-rm credentials
+rm -f credentials
 echo "[default]" >> credentials
 echo "aws_access_key_id=$AWS_ACCESS_KEY" >> credentials
 echo "aws_secret_access_key=$AWS_SECRET_ACCESS_KEY" >> credentials
-rm config
+rm -f config 
 echo "[default]" >> config
 echo "region=$AWS_REGION" >> config
 echo "output=json">> config
