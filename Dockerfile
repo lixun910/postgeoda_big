@@ -14,6 +14,9 @@ ARG LISA_END=500
 ENV RUN_START=${LISA_START}
 ENV RUN_END=${LISA_END}
 
+ARG NEWPORT=5432
+ENV NEW_PORT=${NEWPORT}
+
 # Install dev environment
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && apt-get install -y -q apt-utils
@@ -35,7 +38,7 @@ RUN apt-get install -y -q \
     #gdal-bin postgresql-10-postgis-2.4 postgresql-10-postgis-scripts postgis
 
 # Setting PostgreSQL
-RUN sed -i 's/\(peer\|md5\)/trust/' /etc/postgresql/10/main/pg_hba.conf && \
+RUN sed -i 's/\(peer\|md5\)/trust/' /etc/postgresql/10/main/pg_hba.conf && \  
     service postgresql start && \
     createuser publicuser --no-createrole --no-createdb --no-superuser -U postgres && \
     service postgresql stop
@@ -62,7 +65,7 @@ RUN cd /tmp && ./download_data.sh
 
 # create table
 RUN service postgresql start && /bin/su postgres -c \
-      /tmp/create_table.sh 
+      /tmp/create_table.sh && service postgresql stop
 
-CMD ["sh", "-c", "service postgresql start && /bin/su postgres -c /tmp/run.sh"]
+CMD ["sh", "-c", "/tmp/change_port.sh && service postgresql start && /bin/su postgres -c /tmp/run.sh"]
  
